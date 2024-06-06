@@ -1815,3 +1815,17 @@ width: 20%;
 .abcd p {
   text-align: center;
 }
+
+.loader {
+  margin: 0 auto;
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3eede6; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.loader:hover {
+  border-top: 5px solid #3eede6;
+}

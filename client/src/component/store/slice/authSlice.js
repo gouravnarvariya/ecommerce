@@ -15,11 +15,8 @@ export const handleLogin = createAsyncThunk (
       try {  const response = await Api.post("/user/login",body)
         const { data, statusCode, message } = response
         // console.log("response in thunk" , response.data.user.id)
-        // console.log("status" , response.status)
+        console.log("status" , response)
         if (statusCode) {
-            setAccessToken(data.accessToken)
-            setRefreshToken(data.refreshToken)
-            setUserId(response.data.user.id)
             return { data }
           } else {
             return {
@@ -27,6 +24,7 @@ export const handleLogin = createAsyncThunk (
             }
           }
         } catch (error) {
+          console.log(error)
           if (error.response) {
             // Server responded with an error status code
             const { status, data } = error.response;

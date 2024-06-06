@@ -6,6 +6,7 @@ import { ValidateLogin } from '../validate/validate';
 import { toast } from "react-toastify";
 import {  handleLogin } from '../store/slice/authSlice';
 import { addAccessToken } from '../Api/Api';
+import { setAccessToken, setRefreshToken, setUserId } from '../Tokenhandler/TokenHandler';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -33,19 +34,23 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (userData.data) {
-            localStorage.setItem("user", "loggedIn");
+        console.log(userData)
+        if (userData?.data) {
+            setAccessToken(userData?.data?.accessToken)
+            setRefreshToken(userData?.data?.refreshToken)
+            setUserId(userData?.data?.loggedInUser?.id)
+            // localStorage.setItem("user", "loggedIn");
             addAccessToken(userData?.data?.token);
-            navigate('/');
+            navigate('/home');
         }
-    }, [userData.data, navigate]);
+    }, [userData.data]);
 
     useEffect(() => {
-        if (userData.error) {
+        if (userData?.error) {
             toast.error(userData.error.message);
             
         }
-    }, [userData.error, dispatch]);
+    }, [userData.error]);
 
     return (
         <div className='login-page'>
@@ -72,7 +77,8 @@ const Login = () => {
                                 <i className="fa-solid fa-lock"></i>
                             </div>
                             <div className='form-login-button'>
-                                <button onClick={handleSubmit}>Login</button>
+                           
+                                <button onClick={handleSubmit}> {userData?.pending ? <div className="loader"></div> : 'Login'}</button>
                             </div>
                             <div className='form-forget'>
                                 <p>Forget Password?</p>

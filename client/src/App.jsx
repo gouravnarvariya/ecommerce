@@ -8,8 +8,9 @@ import { useSelector } from 'react-redux';
 
 
 function App() {
-//  refreshAccessToken()
 
+
+console.log(window.navigator.onLine)
 
   return (
     <>
@@ -35,7 +36,7 @@ function WithHeaderAndFooter() {
 const user = useSelector((store) => store.Authentication.UserAuthLogin);
 
 useEffect(() => {
-  if (user && user.data) {
+  if (user?.data) {
     setIsLogged(true);
   } else {
     setIsLogged(false);
@@ -45,9 +46,10 @@ useEffect(() => {
     <div className="wrapper">
       <Header />
       <Routes>
-      {isLogged ?  <Route path='/' element={<Homepage />} /> :  <Route path='/' element={<DefaultPage />} /> }
-        {/* <Route path='/' element={<DefaultPage />} />  */}
-        {/* <Route path='/' element={<Homepage />} /> */}
+
+      {/* {isLogged ?  <Route path='/' element={<Homepage />} /> :  <Route path='/' element={<DefaultPage />} /> } */}
+        <Route index element={<DefaultPage />} /> 
+        <Route path='/home' element={<Homepage />} />
         <Route path='/profile' element={<ProfileMain/>}/>
         <Route path='/change-password' element={<ChangePasswordMain/>}/>
         <Route path='/privacy-policy' element={<PrivacyPolicyMain/>}/>

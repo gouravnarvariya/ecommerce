@@ -14,7 +14,7 @@ const Breadcrumb = () => {
           <div className="breadcrumb-inner">
             <div className="page-title title-wthback-icon">
               <div className="back-page-btn">
-                <Link to='/'>
+                <Link to='/home'>
                   <svg
                     width="16"
                     height="17"

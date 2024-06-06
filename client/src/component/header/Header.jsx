@@ -17,10 +17,12 @@ const Header = () => {
   const searchRef = useRef(null);
   // console.log(user.data.name)
   useEffect(() => {
-    if (user && user.data) {
+    if (localStorage.getItem("_id")) {
       setIsLogged(true);
+      console.log("first")
     } else {
       setIsLogged(false);
+      console.log("else")
     }
   }, [user]);
 
@@ -139,7 +141,7 @@ const Header = () => {
             )}
             {isLogged ? (
               <div className="search-bar-icon">
-                <Link to="/profile">{user.data && user.data.name}</Link>
+                <Link to="/profile">{user?.data?.loggedInUser?.name}</Link>
               </div>
             ) : (
               <div className="search-bar-icon">

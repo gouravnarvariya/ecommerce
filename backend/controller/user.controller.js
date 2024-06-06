@@ -58,6 +58,10 @@ const loginUser = async (req, res) => {
     // throw new ApiError(400, "Email and password are required");
   }
 
+  try{
+
+  
+
   const user = await User.findOne({
     where: { email }
   });
@@ -99,10 +103,12 @@ const loginUser = async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken },
+        { user: {loggedInUser, accessToken, refreshToken }},
         "User logged in successfully"
       )
-    );
+    ); } catch (error) {
+      return res.status(500).json({message: "Internal server error" });
+    }
 };
 
 const logoutUser = async (req, res) => {
@@ -133,7 +139,7 @@ const refreshAccessToken = async (req, res) => {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
     if (!incomingRefreshToken) {
-        throw new ApiError(401, "Unauthorized request");
+        throw new ApiError(403, "Unauthorized request");
     }
     console.log("incomint--" , incomingRefreshToken)
     try {

@@ -2,6 +2,7 @@ import React from 'react'
 import {  useDispatch, useSelector } from 'react-redux'
 import { addToWishlist } from '../../store/slice/productSlice'
 import { addCartProduct } from '../../store/slice/cartSlice'
+import { Link } from 'react-router-dom'
 
 
 const ProductSection = () => {
@@ -56,9 +57,10 @@ const ProductSection = () => {
      className='add-to-wishlist'>Add to wishlist</button>
     </div>
     <div>
+    <Link to={'/cart'}>
     <button 
     onClick={()=>{handleCart(product.product_id)}}
-     className='add-to-cart'>Add to cart</button>
+     className='add-to-cart'>Add to cart</button></Link>
     </div>
     </div>
     </div>
