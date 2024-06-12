@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getUserData, updateuserData} from '../../store/slice/userSlice'
 import { ValidateUpdateData } from '../../validate/validate'
 import { toast } from 'react-toastify'
 import Api from '../../Api/Api'
 
 const ProfileForm = () => {
+
+
 
     const [userData , setuserData] = useState( {payload: {
       data: {
@@ -17,6 +19,9 @@ const ProfileForm = () => {
           id:localStorage.getItem("_id") // Assuming this is the structure of your data
       }
   }})
+  const UserData = useSelector((store) => store.User.UserData)
+  const {pending , data , error} = UserData
+  // console.log("a------",pending , data, error)
     const [selectedFile, setSelectedFile] = useState(null);
     const [showUpload , setShowUpload] = useState(false)
     const [isUpload , setIsUpload] = useState(false)
@@ -52,7 +57,7 @@ const ProfileForm = () => {
       try {
         if(localStorage.getItem("access_token")) {
           const user = await dispatch(getUserData());
-          console.log("user", user);
+          // console.log("user", user);
           setuserData(user);
         }
        
@@ -107,7 +112,7 @@ const ProfileForm = () => {
         fetchUserData();
     }, []);
     
-    
+   
 
   return (
     <div className="card">
@@ -116,7 +121,11 @@ const ProfileForm = () => {
         <h3>Personal Details:</h3>
       </div>
     </div>
-
+    {error ? (
+  <div>Error: {error.message}</div>
+) : pending ? (
+  <div>Loading...</div>
+) : (
     <div className="card-body">
       <div className="form-main">
       <div className="prfl-card">
@@ -201,7 +210,7 @@ const ProfileForm = () => {
         </div>
       </div>
     </div>
-  </div>
+  </div> )}
   </div>
   )
 }

@@ -8,13 +8,13 @@ export const setAccessToken = (access_token) => {
 };
 
 export const setRefreshToken = (refresh_token) => {
-  console.log("refresh_token=>" , refresh_token);
+  // console.log("refresh_token=>" , refresh_token);
   localStorage.setItem(
     "refresh_token", refresh_token,);
 };
 
 export const setUserId = (id) => {
-  console.log("user_id" , id);
+  // console.log("user_id" , id);
   localStorage.setItem(
     "_id", id,);
 };
@@ -47,7 +47,7 @@ export const refreshAccessToken = async () => {
 
 
 export const clearToken = () => {
-  console.log("clear done ")
-  // localStorage.clear();
-  // window.location.href = "/"
+  // console.log("clear done ")
+  localStorage.clear();
+  window.location.href = "/login"
 };

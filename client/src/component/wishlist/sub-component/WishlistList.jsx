@@ -13,15 +13,15 @@ const WishlistList = () => {
   const getWishlistProduct = useSelector(
     (store) => store.product.wishlistProductList
   );
-  console.log(getWishlistProduct.data);
+  // console.log(getWishlistProduct.data);
 
   useEffect(() => {
     dispatch(getAllWishlistProduct()).then((response) => {
       if (response.payload && response.payload.length > 0) {
-        console.log("secod")
+        // console.log("secod")
         setNoResult(false);
       } else {
-        console.log("first")
+        // console.log("first")
         setNoResult(true);
       }
     });
@@ -36,10 +36,10 @@ const WishlistList = () => {
     dispatch(addToWishlist(body)).then(() => {
       dispatch(getAllWishlistProduct()).then((response) => {
         if (response.payload && response.payload.length > 0) {
-          console.log("secod")
+          // console.log("secod")
           setNoResult(false);
         } else {
-          console.log("first")
+          // console.log("first")
           setNoResult(true);
         }
       });

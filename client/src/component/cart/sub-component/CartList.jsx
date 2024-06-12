@@ -13,10 +13,10 @@ const CartList = () => {
   useEffect(() => {
     dispatch(getCartProduct()) .then((response) => {
           if (response.payload && response.payload.length > 0) {
-            console.log("secod")
+            // console.log("secod")
             setNoResult(false);
           } else {
-            console.log("first")
+            // console.log("first")
             setNoResult(true);
           }
         });

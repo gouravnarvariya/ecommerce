@@ -4,10 +4,10 @@ import Breadcrumb from './Breadcrumb'
 import { useSelector } from 'react-redux'
 
 const CheckoutSection = () => {
-    const user = useSelector((store)=>store.Authentication.UserAuthLogin.data)
-    console.log(user)
+    const user = useSelector((store)=>store.Authentication.UserAuthLogin.data.loggedInUser)
+    // console.log(user)
     const location = useLocation()
-    console.log(location)
+    // console.log(location)
     const {totalAmount ,Discount,DeliveryCharge} = location.state
   return (
     <div className="container">

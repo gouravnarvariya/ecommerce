@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 const WalletMain = () => {
 
   const location = useLocation()
-  console.log(location)
+  // console.log(location)
   const {totalAmount} = location.state
 
   const [boxShow, setBoxShow] = useState({

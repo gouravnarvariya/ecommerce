@@ -1,6 +1,7 @@
-const User = require("../models/user.model")
-const ApiError = require("../utils/ApiError")
 const jwt = require('jsonwebtoken');
+const db = require('../database/database');
+
+const User = db.User;
 
  const verifyJWT = async(req, res, next) => {
     try {

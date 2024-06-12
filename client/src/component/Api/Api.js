@@ -1,5 +1,7 @@
 import axios from "axios";
 import { checkToken, clearToken, refreshAccessToken, setAccessToken } from "../Tokenhandler/TokenHandler";
+// import { Link, useNavigate } from "react-router-dom";
+
 
 const baseURL = import.meta.env.VITE_BASEURL;
 const instance = axios.create({
@@ -8,6 +10,8 @@ const instance = axios.create({
     "Access-Control-Allow-Origin": "*"
   },
 });
+
+
 
 // Function to add the access token to the headers
 export const addAccessToken = (token) => {
@@ -20,35 +24,76 @@ export const addAccessToken = (token) => {
   instance.defaults.headers.common["Accept"] = `application/json`;
 };
 
+// // Axios interceptor for handling 401 responses
+// const interceptor = instance.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     if (error.response) {
+//       const { status } = error.response;
+//       if (status === 401 && !error.config._isRetry) {
+//         originalRequest._retry = true;
+//         try {
+//           // Refresh the access token
+//           const newToken = await refreshAccessToken();
+//           console.log("newToken ", newToken);
+          
+//           // Update headers with the new access token
+//           error.config.headers["Authorization"] = `Bearer ${newToken}`;
+//           error.config.headers["Accept"] = `application/json`;
+          
+//           // Retry the original request after token refresh
+//           error.config._isRetry = true;
+//           setAccessToken(newToken);
+//           return instance(error.config);
+//         } catch (refreshError) {
+//           const {response} = refreshError
+//           console.log(response.data.message)
+//           console.log("refresh error ----", refreshError);
+//           // If token refresh fails, clear the token and handle the error
+//           clearToken();
+//           // throw refreshError;
+//         }
+//       }
+//     } else {
+//       // Handle errors without response (e.g., network issues)
+//       console.error("Network or other error:", error);
+//     }
+//     throw error;
+//   }
+// );
+
 // Axios interceptor for handling 401 responses
 const interceptor = instance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     if (error.response) {
-      const { status } = error.response;
-      if (status === 401 && !error.config._isRetry) {
+      console.log(error.response)
+      const { status, config } = error.response;
+      if(status === 401 && error.response.data.message==="Invalid refresh token" ||error.response.data.message==="Unauthorized token") {
+        console.log("aayayayayaya")
+        return clearToken()
+      }
+      if (status === 401 && !config._isRetry) {
+        config._isRetry = true;
         try {
           // Refresh the access token
           const newToken = await refreshAccessToken();
-          console.log("newToken ", newToken);
-          
+          console.log("newToken", newToken);
+
           // Update headers with the new access token
-          error.config.headers["Authorization"] = `Bearer ${newToken}`;
-          error.config.headers["Accept"] = `application/json`;
-          
-          // Retry the original request after token refresh
-          error.config._isRetry = true;
+          config.headers['Authorization'] = `Bearer ${newToken}`;
           setAccessToken(newToken);
-          return instance(error.config);
+
+          // Retry the original request with new token
+          return instance(config);
         } catch (refreshError) {
-          console.log("refresh error ----", refreshError);
-          // If token refresh fails, clear the token and handle the error
-          clearToken();
-          throw refreshError;
+          console.error("refresh error ----", refreshError);
+          clearToken(); // Clear tokens on failure to refresh
         }
       }
     } else {
       // Handle errors without response (e.g., network issues)
+      clearToken();
       console.error("Network or other error:", error);
     }
     throw error;

@@ -1,116 +1,100 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Api from "../../Api/Api";
-import { clearToken, setAccessToken, setRefreshToken, setUserId } from "../../Tokenhandler/TokenHandler";
-// import {  setAccessToken } from "../../Tokenhandler/TokenHandler";
+import { clearToken } from "../../Tokenhandler/TokenHandler";
+import { toast } from "react-toastify";
 
 const initialState = {
-  UserAuthLogin : {pending:false , data:null , error:null},
-  
+  UserAuthLogin: { pending: false, data: null, error: null },
+  isLogged: false
+};
 
-}
-
-export const handleLogin = createAsyncThunk (
-  "/api/user/login",  // Descriptive name for the async thunk
-    async(body)=>{
-      try {  const response = await Api.post("/user/login",body)
-        const { data, statusCode, message } = response
-        // console.log("response in thunk" , response.data.user.id)
-        console.log("status" , response)
-        if (statusCode) {
-            return { data }
-          } else {
-            return {
-              error: { type: "server", message, },
-            }
-          }
-        } catch (error) {
-          console.log(error)
-          if (error.response) {
-            // Server responded with an error status code
-            const { status, data } = error.response;
-            return { error: { type: "server", message: data.message } };
-          } else if (error.request) {
-            // The request was made but no response was received
-            return { error: { type: "network", message: "Network Error" } };
-          } else {
-            // Something happened in setting up the request that triggered an error
-            return { error: { type: "unknown", message: error.message } };
-          }
-    }
-  }
-)
-
-export const handleLogout = createAsyncThunk(
-  '/user/logout',
-  async() => {
+export const handleLogin = createAsyncThunk(
+  "/api/user/login",
+  async (body) => {
     try {
-      const response = Api.post('/user/logout' ,{id:localStorage.getItem("_id")} ) 
-      const {status} = response
-      if(status) {
-
-        clearToken()
-      }  else {
-        return {
-          error: { type: "server",  },
-        }
+      const response = await Api.post("/user/login", body);
+      const { data, statusCode, message } = response;
+      if (statusCode) {
+        return { data };
+      } else {
+        return { error: { type: "server", message } };
       }
     } catch (error) {
       if (error.response) {
-        // Server responded with an error status code
-        const {  data } = error.response;
-        return { error: { type: "server", message: data.message } };
+        const { data } = error.response;
+        if (data.message) {
+          toast.error(data.message);
+          return { error: { type: "server", message: data.message } };
+        }
       } else if (error.request) {
-        // The request was made but no response was received
         return { error: { type: "network", message: "Network Error" } };
       } else {
-        // Something happened in setting up the request that triggered an error
         return { error: { type: "unknown", message: error.message } };
       }
-}
-
+    }
   }
+);
 
-)
+export const handleLogout = createAsyncThunk(
+  "/user/logout",
+  async () => {
+    try {
+      const response = await Api.post('/user/logout', { id: localStorage.getItem("_id") });
+      const { status } = response;
+      if (status) {
+        clearToken();
+      } else {
+        return { error: { type: "server" } };
+      }
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        return { error: { type: "server", message: data.message } };
+      } else if (error.request) {
+        return { error: { type: "network", message: "Network Error" } };
+      } else {
+        return { error: { type: "unknown", message: error.message } };
+      }
+    }
+  }
+);
 
 const Authentication = createSlice({
-    name : "Authentication",
-    initialState : initialState,
-    reducers : {
-     logout: (state) => {
-      state.UserAuthLogin = { pending: false, data: null, error: null }
-      
+  name: "Authentication",
+  initialState,
+  reducers: {
+    UserLogout: (state) => {
+      state.UserAuthLogin = { pending: false, data: null, error: null };
+      state.isLogged = false;
     }
-    },
-    extraReducers(builder) {
-        builder
-          // Login 
-      .addCase(handleLogin.pending, (state, action) => {
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(handleLogin.pending, (state) => {
         state.UserAuthLogin.pending = true;
       })
       .addCase(handleLogin.fulfilled, (state, action) => {
-        // console.log("slice action payload" ,action.payload)
-        console.log("slice" , action.payload)
         state.UserAuthLogin.pending = false;
         if (action.payload.data) {
-          state.UserAuthLogin.data = action.payload.data.user
+          state.UserAuthLogin.data = action.payload.data.user;
+          state.isLogged = true;
         } else {
           state.UserAuthLogin.error = action.payload.error;
         }
       })
       .addCase(handleLogin.rejected, (state, action) => {
         state.UserAuthLogin.pending = false;
-        if (action?.payload?.error) {
-          state.UserAuthLogin.error = action?.payload?.error;
-        } else {
-          state.UserAuthLogin.error = {
-            type: "server",
-            message: "Internal server Error",
-          }
-        }
+        state.UserAuthLogin.error = action.payload?.error || {
+          type: "server",
+          message: "Internal server Error",
+        };
       })
-      }
-})
+      .addCase(handleLogout.fulfilled, (state) => {
+        state.UserAuthLogin.data = null;
+        state.isLogged = false;
+      });
+  }
+});
 
-
-export const {logout} = Authentication.actions
-export default Authentication.reducer
+export const { UserLogout } = Authentication.actions;
+export default Authentication.reducer;

@@ -1,26 +1,22 @@
-const { DataTypes, Sequelize } = require('sequelize');
-const sequelize = new Sequelize('shopingKart', 'root', 'password', {
-    host: 'localhost',
-    dialect: 'mysql'
-});
+module.exports = (sequelize, DataTypes) => {
+  const Category = sequelize.define('Category', {
+    category_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    category_image: {
+      type: DataTypes.STRING,
+      allowNull: true, // Allow null if the image is optional
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false, // Ensure category name is required
+    },
+  }, {
+    tableName: 'categories',
+    timestamps: false, // Set to true if you want Sequelize to manage timestamps
+  });
 
-
-// Define Category model
-const Category = sequelize.define('Category', {
-  category_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  category_image: {
-    type: DataTypes.STRING,
-  },
-  name: {
-    type: DataTypes.STRING,
-  },
-}, {
-  tableName: 'categories',
-  timestamps: false, // If you want Sequelize to manage timestamps, set this to true
-});
-
-module.exports = { Category };
+  return Category;
+};

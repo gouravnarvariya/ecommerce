@@ -12,7 +12,7 @@ const CardSection = () => {
   const dispatch = useDispatch();
   const productList = useSelector((store) => store.product.productList);
   const wishlistItems = useSelector((store) => store.product.wishlistProductList);
-
+  // console.log(productList)
   useEffect(() => {
     dispatch(getAllProduct());
     dispatch(getAllWishlistProduct());

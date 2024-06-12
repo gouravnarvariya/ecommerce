@@ -12,5 +12,6 @@ export {default as WishlistListMain} from './src/component/wishlist/WishlistMain
 export { default as CategoryMain} from './src/component/category-page/CategoryMain'
 export { default as CartMain } from './src/component/cart/CartMain'
 export { default as CheckoutMain} from './src/component/checkout/CheckoutMain'
-export {default as Walletmain} from './src/component/wallet/WalletMain'
+export {default as WalletMain} from './src/component/wallet/WalletMain'
 export {default as ProductMain} from './src/component/product/ProductMain'
+export {default as InternetOff} from './src/component/internetoff/InternetOff'

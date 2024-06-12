@@ -15,7 +15,6 @@ const Login = () => {
         email: "",
         password: ""
     });
-    const [error, setError] = useState();
 
     const userData = useSelector((store) => store.Authentication.UserAuthLogin);
 
@@ -25,32 +24,25 @@ const Login = () => {
 
     const handleSubmit = () => {
         const errorMessage = ValidateLogin(data);
-        setError(errorMessage);
+        console.log(errorMessage)
         if (errorMessage.isValid) {
             dispatch(handleLogin(data));
         } else {
-            toast.error(errorMessage.message);
+            toast.error(errorMessage.errors.email||errorMessage.errors.password);
         }
     };
 
     useEffect(() => {
-        console.log(userData)
+        // console.log(userData)
         if (userData?.data) {
             setAccessToken(userData?.data?.accessToken)
             setRefreshToken(userData?.data?.refreshToken)
             setUserId(userData?.data?.loggedInUser?.id)
-            // localStorage.setItem("user", "loggedIn");
             addAccessToken(userData?.data?.token);
             navigate('/home');
         }
     }, [userData.data]);
 
-    useEffect(() => {
-        if (userData?.error) {
-            toast.error(userData.error.message);
-            
-        }
-    }, [userData.error]);
 
     return (
         <div className='login-page'>
@@ -62,7 +54,7 @@ const Login = () => {
                                 <Link to={'/signup'}> <p>Don't have an account? <span>Sign Up</span>  </p></Link>
                             </div>
                             <div className='welcome-heading'>
-                                <h1>Welcome to Fosco</h1>
+                               <Link to={'/'}> <h1>Welcome to Fosco</h1></Link>
                             </div>
                             <div className='form-text'>
                                 <p>Lorem ipsum dolor sit amet,

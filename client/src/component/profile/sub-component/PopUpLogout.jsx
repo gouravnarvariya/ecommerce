@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../store/slice/authSlice";
+import { UserLogout } from "../../store/slice/authSlice";
 // import { setLogged } from "../../../assets/store/headerSlice";
 
 const PopupLogOut = ({ handlePopup }) => {
@@ -11,10 +11,9 @@ const PopupLogOut = ({ handlePopup }) => {
   const buttonClicked = (type) => {
     console.log("type" , type)
     if (type) {
-      dispatch(logout())
+      dispatch(UserLogout())
       localStorage.clear();
       navigate("/");
-
     }
     handlePopup();
   };

@@ -1,7 +1,8 @@
-const Cart = require("../models/cart.model")
-const Product = require('../models/product.model');
 const ApiResponse = require("../utils/ApiResponse");
+const db = require('../database/database');
 
+const Cart = db.Cart;
+const Product = db.Product
 
 const addToCart = async (req, res) => {
     try {

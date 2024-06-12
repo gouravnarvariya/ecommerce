@@ -1023,7 +1023,7 @@ button {
   content: "\f06e";
 }
 .pwdeye-icon .show-eye {
-  display: none;
+  display: flex;
 }
 .pwdeye-icon span {
   width: 40px;
@@ -1057,9 +1057,9 @@ button {
   color: #9e9c9c;
   font-size: 16px;
 }
-.pwdeye-icon .show-eye {
+/* .pwdeye-icon .show-eye {
   display: none;
-}
+} */
 .chngepwd-btn {
   margin-top: 25px;
 }
@@ -1141,13 +1141,13 @@ textarea {
 
 .card-section{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   border: 1px solid black;
   background-color: rgb(211, 222, 224);
   flex-wrap: wrap;
   gap: 30px;
   row-gap: 30px;
-  padding: 50px 0px;
+  padding: 50px 40px;
 }
 .box{
   width: 22%;
@@ -1175,7 +1175,7 @@ width: 100%;
   align-items: center;
   /* justify-content: space-between; */
   flex-wrap: wrap;
-  gap: 3%;
+  gap: 4%;
   background-color: #D3DEE0;
   row-gap: 50px;
 }
@@ -1213,7 +1213,7 @@ width: 100%;
 }
 
 .product-box button {
-  width: 50%;
+  width: 70%;
   border: none;
   font-weight: bolder;
   background-color: #13140A;
@@ -1829,3 +1829,30 @@ width: 20%;
 .loader:hover {
   border-top: 5px solid #3eede6;
 }
+
+/* Add this CSS to your stylesheet (e.g., styles.css) */
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  z-index: 50;
+  transition: opacity 0.5s;
+}
+
+.modal.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal.invisible {
+  visibility: hidden;
+  opacity: 0;
+}
+

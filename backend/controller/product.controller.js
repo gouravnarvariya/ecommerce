@@ -1,16 +1,18 @@
 const { Op } = require("sequelize");
-const { Category } = require("../models/category.model");
-const Product = require("../models/product.model");
-const User = require("../models/user.model");
-const { Wishlist } = require("../models/wishlist.model");
 const ApiResponse = require("../utils/ApiResponse");
+const db = require("../database/database");
 
+
+const Product = db.Product
+const User = db.User
+const Wishlist = db.Wishlist
+const Category = db.Category
 
 const getAllProduct = async (req, res) => {
     try {
         console.log("Fetching all products...");
         const products = await Product.findAll();
-        console.log("Products retrieved: ", products);
+        // console.log("Products retrieved: ", products);
         return res
         .status(200)
         .json(
@@ -31,7 +33,7 @@ const getAllCategory = async (req, res) => {
     try {
         console.log("Fetching all category...");
         const category = await Category.findAll();
-        console.log("category retrieved: ", category);
+        // console.log("category retrieved: ", category);
         return res
         .status(200)
         .json(

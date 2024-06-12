@@ -1,31 +1,24 @@
-import { faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
-import { getProductBySearch } from '../store/slice/productSlice';
+import {
+  faCartShopping,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getProductBySearch } from "../store/slice/productSlice";
 
 const Header = () => {
-  const [isLogged, setIsLogged] = useState(false);
   const [noResult, setNoResult] = useState(false);
   const [showSearchList, setShowSearchList] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const location = useLocation();
-  const user = useSelector((store) => store.Authentication.UserAuthLogin);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const searchList = useSelector((store) => store.product.searchList);
+  const isLogged = useSelector((store) => store.Authentication.isLogged);
+
   const dispatch = useDispatch();
   const searchRef = useRef(null);
-  // console.log(user.data.name)
-  useEffect(() => {
-    if (localStorage.getItem("_id")) {
-      setIsLogged(true);
-      console.log("first")
-    } else {
-      setIsLogged(false);
-      console.log("else")
-    }
-  }, [user]);
-
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -33,24 +26,23 @@ const Header = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [searchRef]);
 
   const searchFunction = (query) => {
     if (query.trim()) {
-      dispatch(getProductBySearch(query))
-        .then((response) => {
-          if (response.payload && response.payload.length > 0) {
-            setNoResult(false);
-            setShowSearchList(true);
-          } else {
-            setNoResult(true);
-            setShowSearchList(true);
-          }
-        });
+      dispatch(getProductBySearch(query)).then((response) => {
+        if (response.payload && response.payload.length > 0) {
+          setNoResult(false);
+          setShowSearchList(true);
+        } else {
+          setNoResult(true);
+          setShowSearchList(true);
+        }
+      });
     } else {
       setNoResult(false);
       setShowSearchList(false);
@@ -67,7 +59,10 @@ const Header = () => {
     };
   };
 
-  const debouncedHandleSearch = useCallback(handleDelay(searchFunction, 500), []);
+  const debouncedHandleSearch = useCallback(
+    handleDelay(searchFunction, 500),
+    []
+  );
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -81,7 +76,7 @@ const Header = () => {
         <div className="container">
           <div className="search-bar">
             <div className="heading">
-              <Link to={'/'}>
+              <Link to={isLogged ? "/home" : "/"}>
                 <h1>Fasco</h1>
               </Link>
             </div>
@@ -97,19 +92,25 @@ const Header = () => {
                   />
                 </div>
                 <div className="search-icon">
-                  <FontAwesomeIcon className='i' icon={faMagnifyingGlass} />
+                  <FontAwesomeIcon className="i" icon={faMagnifyingGlass} />
                 </div>
               </div>
               {showSearchList && (
                 <div className="search-list" ref={searchRef}>
-                  {searchQuery.trim() === '' ? (
+                  {searchQuery.trim() === "" ? (
                     <div>Please enter a search term</div>
                   ) : noResult ? (
                     <div>No results found</div>
                   ) : (
-                    searchList.data && searchList.data.map((props) => (
-                      <Link to='/product' state={props.product_id} key={props.product_id} onClick={() => setShowSearchList(false)}>
-                        <div className='search-list-div-flex'>
+                    searchList.data &&
+                    searchList.data.map((props) => (
+                      <Link
+                        to="/product"
+                        state={props.product_id}
+                        key={props.product_id}
+                        onClick={() => setShowSearchList(false)}
+                      >
+                        <div className="search-list-div-flex">
                           <img src={props.image} alt={props.name} />
                           <h1>{props.name}</h1>
                         </div>
@@ -121,7 +122,9 @@ const Header = () => {
             </div>
             {isLogged ? (
               <div className="search-bar-icon">
-                <Link to="/wishlist"><i className="fa-solid fa-heart"></i></Link>
+                <Link to="/wishlist">
+                  <i className="fa-solid fa-heart"></i>
+                </Link>
               </div>
             ) : (
               <div className="search-bar-icon">
@@ -129,9 +132,9 @@ const Header = () => {
               </div>
             )}
             {isLogged ? (
-              <Link to={'/cart'}>
+              <Link to={"/cart"}>
                 <div>
-                  <FontAwesomeIcon className='i' icon={faCartShopping} />
+                  <FontAwesomeIcon className="i" icon={faCartShopping} />
                 </div>
               </Link>
             ) : (
@@ -141,11 +144,13 @@ const Header = () => {
             )}
             {isLogged ? (
               <div className="search-bar-icon">
-                <Link to="/profile">{user?.data?.loggedInUser?.name}</Link>
+                <Link to="/profile"> profile</Link>
               </div>
             ) : (
               <div className="search-bar-icon">
-                <Link to="/login"><i className="fa-solid fa-user"></i></Link>
+                <Link to="/login">
+                  <i className="fa-solid fa-user"></i>
+                </Link>
               </div>
             )}
           </div>

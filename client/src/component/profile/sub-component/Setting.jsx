@@ -13,7 +13,7 @@ const Setting = () => {
 
   const handleLogoutPopup = () => {
     setShowLogoutPop((p) => !p);
-    dispatch(handleLogout())
+    
   };
 
   const openCloseSetting = () => {
